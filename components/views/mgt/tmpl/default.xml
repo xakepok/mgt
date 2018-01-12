@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_MGT_SHOW_DATA">
+		<message>
+			<![CDATA[COM_MGT_SHOW_DATA_DESC]]>
+		</message>
+	</layout>
+</metadata>

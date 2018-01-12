@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<fieldset name="sync" label="COM_MGT_SETTINGS_SYNC_LABEL" description="COM_MGT_SETTINGS_SYNC_DESCRIPTION">
+		<field
+			name="enabled"
+			type="list"
+			label="COM_MGT_SETTINGS_SYNC_STATUS"
+			description="COM_MGT_SETTINGS_SYNC_STATUS_DESC"
+			>
+			<option value="0">COM_MGT_SETTINGS_SYNC_STATUS_NO</option>
+			<option value="1">COM_MGT_SETTINGS_SYNC_STATUS_YES</option>
+		</field>
+		<field
+			name="url"
+			type="text"
+			label="COM_MGT_SETTINGS_URL_FIELD"
+			description="COM_MGT_SETTINGS_URL_DESC"
+			component="com_mgt"
+			section="component">
+		</field>
+		<field
+			name="login"
+			type="text"
+			label="COM_MGT_SETTINGS_LOGIN_FIELD"
+			description="COM_MGT_SETTINGS_LOGIN_DESC"
+			component="com_mgt"
+			section="component">
+		</field>
+		<field
+			name="password"
+			type="text"
+			label="COM_MGT_SETTINGS_PASSWORD_FIELD"
+			description="COM_MGT_SETTINGS_PASSWORD_DESC"
+			component="com_mgt"
+			section="component">
+		</field>
+		<field
+			name="hourses"
+			type="text"
+			label="COM_MGT_SETTINGS_TIME_FIELD"
+			description="COM_MGT_SETTINGS_TIME_DESC"
+			component="com_mgt"
+			section="component">
+		</field>
+	</fieldset>
+	<fieldset name="permissions" label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
+		<field name="rules"
+			   type="rules"
+			   label="JCONFIG_PERMISSIONS_LABEL"
+			   filter="rules"
+			   component="com_mgt"
+			   section="component">
+		</field>
+	</fieldset>
+</config>
