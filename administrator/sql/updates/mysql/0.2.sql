@@ -7,6 +7,3 @@ CREATE TABLE IF NOT EXISTS `#__mgt_last_sync` (
 --
 -- Дамп данных таблицы `#__mgt_last_sync`
 --
-
-INSERT INTO `#__mgt_last_sync` (`lastID`, `lastPark`, `lastTime`) VALUES
-  (1001450, 1, '2018-01-12 09:03:04');
