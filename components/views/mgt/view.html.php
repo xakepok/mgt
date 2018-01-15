@@ -8,18 +8,33 @@ class MgtViewMgt extends HtmlView
     public function display() {
     	try
 	    {
-		    $this->items = $this->get('Items');
-		    $this->route = JFactory::getApplication()->input->getString('route', '');
-		    $this->vehicle = JFactory::getApplication()->input->getString('vehicle', '');
-		    $this->park = JFactory::getApplication()->input->getString('park', '');
+            $this->route = JFactory::getApplication()->input->getString('route', '');
+            $this->vehicle = JFactory::getApplication()->input->getString('vehicle', '');
+            $this->park = JFactory::getApplication()->input->getString('park', '');
+
+            if ($this->route == '' && $this->vehicle == '' && $this->park == '')
+            {
+                $this->items = array();
+            }
+            else
+            {
+                $this->items = $this->get('Items');
+            }
 		    $this->stat = $this->get('Stat');
+
+		    $this->prepare();
 
 		    parent::display();
 	    }
 	    catch (Exception $e)
 	    {
-		    JFactory::getApplication()->enqueueMessage(JText::_('COM_MGT_ERROR'), 'error');
+		    JFactory::getApplication()->enqueueMessage(JText::_('COM_MGT_ERROR').' '.$e->getCode().'.\nFile: '.$e->getFile().'.\nLine: '.$e->getLine().',\nText:'.$e->getMessage(), 'error');
 		    JLog::add($e->getMessage(), JLog::ERROR, 'com_mgt');
 	    }
+    }
+
+    private function prepare()
+    {
+        JHtml::_('jquery.framework');
     }
 }

@@ -12,7 +12,8 @@ class MgtModelMgt extends BaseDatabaseModel
 		if ($this->vehicle == '') $this->vehicle = false;
 		$this->park = JFactory::getApplication()->input->getString('park', false);
 		if ($this->park == '') $this->park = false;
-		$this->date = MgtHelper::getDateFromUrl();
+		$this->date_1 = MgtHelper::getDateFromUrl('date_1');
+		$this->date_2 = MgtHelper::getDateFromUrl('date_2');
 		if (mb_substr($this->vehicle, 0, 1) == '0') $this->vehicle = mb_substr($this->vehicle, 1);
 		parent::__construct($config);
 	}
@@ -21,23 +22,32 @@ class MgtModelMgt extends BaseDatabaseModel
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$table = ($this->date == MgtHelper::getCurrentDate('Y-m-d')) ? '#__mgt_online, #__mgt_online_archive' : '#__mgt_online_archive';
+		$table = ($this->date_1 == MgtHelper::getCurrentDate('Y-m-d')) ? '#__mgt_online' : '#__mgt_online_archive';
+
+		$format = ($this->date_1 == $this->date_2) ? '%k.%i' : '%d.%m.%Y';
 
 		if ($this->route === false && $this->vehicle === false)
 		{
-			$query->select('DISTINCT `vehicle`, `route`');
+			$query->select('DISTINCT `o`.`vehicle`, `o`.`route`');
 		}
 		if ($this->route !== false && $this->vehicle === false)
 		{
-			$query->select("`vehicle`, `route`, DATE_FORMAT(`dat`, '%k.%i') as `dat`");
+			$query->select("`vehicle`, `route`, DATE_FORMAT(`dat`, '{$format}') as `dat`");
 			$query->where("`route` = '{$this->route}'");
 		}
 		if ($this->route === false && $this->vehicle !== false)
 		{
-			$query->select("`vehicle`, `route`, DATE_FORMAT(`dat`, '%k.%i') as `dat`");
+			$query->select("`vehicle`, `route`, DATE_FORMAT(`dat`, '{$format}') as `dat`");
 			$query->where("`vehicle` = '{$this->vehicle}'");
 		}
-		$query->where("`dat` LIKE '{$this->date}%'");
+		if ($this->date_1 == $this->date_2)
+        {
+            $query->where("`dat` LIKE '{$this->date_1}%'");
+        }
+        else
+        {
+            $query->where("`dat` BETWEEN '{$this->date_1} 00:00:00' AND '{$this->date_2} 23:59:59'");
+        }
 
 		$query->from($table);
 		$query->order('`vehicle` ASC, `dat` DESC');
@@ -91,5 +101,5 @@ class MgtModelMgt extends BaseDatabaseModel
 		return $last;
 	}
 
-	private $park, $route, $vehicle, $date;
+	private $park, $route, $vehicle, $date_1, $date_2;
 }

@@ -32,9 +32,9 @@ class MgtHelper
 	}
 
 	/* Получение даты из УРЛ */
-	static function getDateFromUrl()
+	static function getDateFromUrl($varName = 'date')
 	{
-		$dat = JFactory::getApplication()->input->getString('date', false);
+		$dat = JFactory::getApplication()->input->getString($varName, false);
 		return (!$dat || !self::isDate($dat)) ? self::getCurrentDate("Y-m-d") : $dat;
 	}
 
