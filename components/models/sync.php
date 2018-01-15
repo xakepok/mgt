@@ -37,7 +37,8 @@ class MgtModelSync extends BaseDatabaseModel
 		if ($id['lastPark'] == '1' && $id['lastID'] > 1001750) return array('lastPark' => '3', 'lastID' => '1003000');
 		if ($id['lastPark'] == '3' && $id['lastID'] > 1003998 && $id['lastID'] < 1004001) return array('lastPark' => '3', 'lastID' => '1004000');
 		if ($id['lastPark'] == '3' && $id['lastID'] > 1004998) return array('lastPark' => '4', 'lastID' => '1004000');
-		if ($id['lastPark'] == '4' && $id['lastID'] > 1004998) return array('lastPark' => '8', 'lastID' => '1008000');
+		if ($id['lastPark'] == '4' && $id['lastID'] > 1004998) return array('lastPark' => '8', 'lastID' => '1001000');
+		if ($id['lastPark'] == '8' && $id['lastID'] > 1001998 && $id['lastID'] < 1008001) return array('lastPark' => '8', 'lastID' => '1008000');
 		if ($id['lastPark'] == '8' && $id['lastID'] > 1008550) return array('lastPark' => '9', 'lastID' => '1016000');
 		if ($id['lastPark'] == '9' && $id['lastID'] > 1016998 && $id['lastID'] < 1017001) return array('lastPark' => '9', 'lastID' => '1017000');
 		if ($id['lastPark'] == '9' && $id['lastID'] > 1017800) return array('lastPark' => '11', 'lastID' => '1011000');

@@ -21,7 +21,7 @@ class MgtModelMgt extends BaseDatabaseModel
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$table = ($this->date == MgtHelper::getCurrentDate('Y-m-d')) ? '#__mgt_online' : '#__mgt_online_archive';
+		$table = ($this->date == MgtHelper::getCurrentDate('Y-m-d')) ? '#__mgt_online, #__mgt_online_archive' : '#__mgt_online_archive';
 
 		if ($this->route === false && $this->vehicle === false)
 		{

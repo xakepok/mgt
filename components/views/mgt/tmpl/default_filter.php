@@ -25,6 +25,7 @@ echo "<p>", JText::_('COM_MGT_ONLINE_FILTER'), ":</p>";
                     <option value="14" <?php if ($this->park == '14') echo ' selected';?>>14</option>
                     <option value="15" <?php if ($this->park == '15') echo ' selected';?>>15</option>
                     <option value="16" <?php if ($this->park == '16') echo ' selected';?>>16</option>
+                    <option value="17" <?php if ($this->park == '17') echo ' selected';?>>17</option>
                     <option value="19" <?php if ($this->park == '19') echo ' selected';?>>19</option>
                 </select>
             </td>
