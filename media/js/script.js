@@ -11,6 +11,13 @@ jQuery(document).ready(function () {
             showError(1);
             return false;
         }
+        var d1 = new Date(date_1);
+        var d2 = new Date(date_2);
+        if (d1 > d2)
+        {
+            showError(2);
+            return false;
+        }
     });
     jQuery("input[name='vehicle']").change(function () {
         if (jQuery("input[name='vehicle']").val() != '') jQuery("input[name='route']").val('');
@@ -30,3 +37,4 @@ function showError(code) {
 
 var errors = [];
 errors[1] = 'Слишком большой временной промежуток. Укажите больше параметров в фильтре.';
+errors[2] = 'Первая дата не может быть больше второй.';

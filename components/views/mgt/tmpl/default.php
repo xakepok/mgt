@@ -8,9 +8,13 @@ HTMLHelper::_('stylesheet', 'com_mgt/style.css', array('version' => 'auto', 'rel
 </div>
 <div class="mgt-filter">
     <div><?php echo $this->loadTemplate('filter');?></div>
+    <?php if (!empty($this->stat) && $this->stat !== false): ?>
     <br>
     <div><?php echo $this->loadTemplate('stat');?></div>
+    <?php endif; ?>
+	<?php if ((bool) MgtHelper::getConfig('show_about', false) !== false): ?>
     <br>
     <div><?php echo $this->loadTemplate('version');?></div>
+	<?php endif; ?>
 </div>
 <div class="clear"></div>

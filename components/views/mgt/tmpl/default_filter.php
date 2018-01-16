@@ -9,8 +9,10 @@ echo "<p>", JText::_('COM_MGT_ONLINE_FILTER'), ":</p>";
             </td>
             <td>
                 <input type="date" name="date_1" value="<?php echo MgtHelper::getDateFromUrl('date_1'); ?>" min="2017-12-12" max="<?php echo MgtHelper::getCurrentDate('Y-m-d');?>" autocomplete="off"/>
-                <input type="date" name="date_2" value="<?php echo MgtHelper::getDateFromUrl('date_2'); ?>" min="2017-12-12" max="<?php echo MgtHelper::getCurrentDate('Y-m-d');?>" autocomplete="off"/>
+                <br>
                 <span class="mgt-cur-date"><?php echo JText::_('COM_MGT_ONLINE_COPY_DATE'); ?></span>
+                <br>
+                <input type="date" name="date_2" value="<?php echo MgtHelper::getDateFromUrl('date_2'); ?>" min="2017-12-12" max="<?php echo MgtHelper::getCurrentDate('Y-m-d');?>" autocomplete="off"/>
             </td>
         </tr>
         <tr>
@@ -51,7 +53,7 @@ echo "<p>", JText::_('COM_MGT_ONLINE_FILTER'), ":</p>";
         <tr>
             <td colspan="2">
                 <input type="submit" value="<?php echo JText::_('COM_MGT_ONLINE_FILTER_APPLY'); ?>"><br>
-                <span id="mgt-alert"></span>
+                <div><span id="mgt-alert"></span></div>
             </td>
         </tr>
     </table>

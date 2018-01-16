@@ -24,7 +24,7 @@ class MgtModelMgt extends BaseDatabaseModel
 		$query = $db->getQuery(true);
 		$table = ($this->date_1 == MgtHelper::getCurrentDate('Y-m-d')) ? '#__mgt_online' : '#__mgt_online_archive';
 
-		$format = ($this->date_1 == $this->date_2) ? '%k.%i' : '%d.%m.%Y';
+		$format = ($this->date_1 == $this->date_2) ? '%k.%i' : '%d.%m.%Y %k:%i';
 
 		if ($this->route === false && $this->vehicle === false)
 		{
@@ -83,6 +83,7 @@ class MgtModelMgt extends BaseDatabaseModel
 	/* Статистика */
 	public function getStat()
 	{
+		if (!(bool) MgtHelper::getConfig('show_stat', false)) return false;
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$query
