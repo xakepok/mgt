@@ -28,7 +28,7 @@ class MgtModelMgt extends BaseDatabaseModel
 
 		if ($this->route === false && $this->vehicle === false)
 		{
-			$query->select('DISTINCT `o`.`vehicle`, `o`.`route`');
+			$query->select('DISTINCT `vehicle`, `route`');
 		}
 		if ($this->route !== false && $this->vehicle === false)
 		{
