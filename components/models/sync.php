@@ -48,7 +48,7 @@ class MgtModelSync extends BaseDatabaseModel
 		if ($id['lastPark'] == '15' && $id['lastID'] > 1015998) return array('lastPark' => '17', 'type'=>0, 'lastID' => '1017000');
 		if ($id['lastPark'] == '17' && $id['lastID'] > 1017998) return array('lastPark' => '19', 'type'=>0, 'lastID' => '1019000');
 		if ($id['lastPark'] == '19' && $id['lastID'] > 1019600) return array('lastPark' => '204', 'type'=>2, 'lastID' => '1203000');
-		if ($id['lastPark'] == '204' && $id['lastID'] > 1204999) return array('lastPark' => '1', 'type'=>0, 'lastID' => '100000');
+		if ($id['lastPark'] == '204' && $id['lastID'] > 1204800) return array('lastPark' => '1', 'type'=>0, 'lastID' => '100000');
 		return $id;
 	}
 
@@ -80,7 +80,7 @@ class MgtModelSync extends BaseDatabaseModel
 				$num = mb_stripos($tmp, ' / ');
 				if ($num !== false)
 				{
-					$vehicle = (int) ($start['lastPark'] < 20) ? trim(mb_substr($tmp, $num+3, NULL, 'UTF-8')) : trim(mb_substr($tmp, 0, 4, 'UTF-8'));
+					$vehicle = (int) ($start['lastPark'] < 20) ? trim(mb_substr($tmp, $num+3, NULL, 'UTF-8')) : trim(mb_substr($tmp, $num-5, 5));
 					if ($vehicle != 0) $res[$params['uniqueid']]['vehicle'] = $vehicle;
 					break;
 				}
@@ -92,13 +92,13 @@ class MgtModelSync extends BaseDatabaseModel
 				foreach ($d->find("a[href^='?mr_id']") as $fnd)
 				{
 					$tmp = trim(pq($fnd)->text());
-					if ($start['type'] != 0) //Для троллейбусов и трамваев
+					if ($start['lastPark'] > 19) //Для троллейбусов и трамваев
 					{
 						$t = explode('.', $tmp);
 						$tmp = $t[1];
 					}
 					$res[$params['uniqueid']]['route'] = $tmp;
-					$res[$params['uniqueid']]['type'] = $start['type'];
+					$res[$params['uniqueid']]['type'] = ($start['lastPark'] < 20) ? '0' : '2';
 				}
 			}
 		}
@@ -126,7 +126,7 @@ class MgtModelSync extends BaseDatabaseModel
 		foreach ($data as $item => $value) {
 			$route = $value['route'];
 			$vehicle = $value['vehicle'];
-			$tip = $value['tip'];
+			$tip = $value['type'];
 			if ($vehicle != 0) $values[] = "('{$tip}', '{$vehicle}', '{$route}', '{$item}')";
 		}
 		$query .= implode(',', $values);

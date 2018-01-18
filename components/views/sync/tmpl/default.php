@@ -24,7 +24,7 @@ HTMLHelper::_('stylesheet', 'com_mgt/style.css', array('version' => 'auto', 'rel
 		<?php foreach ($this->text as $uniqueid => $value): ?>
             <tr>
                 <td>
-					<?php echo MgtHelper::convertBort('view', $value['vehicle']); ?>
+					<?php echo MgtHelper::convertBort('view', $value['vehicle'], $value['type']); ?>
                 </td>
                 <td>
 					<?php echo $value['route']; ?>

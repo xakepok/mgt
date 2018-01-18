@@ -22,9 +22,9 @@ class MgtHelper
 	 * $to == 'base' - в базу
 	 * $bort - бортовой номер
 	 * */
-	static function convertBort($to, $bort)
+	static function convertBort($to, $bort, $tip = 0)
 	{
-		if ($to == 'view')
+		if ($to == 'view' && $tip < 1)
 		{
 			if (strlen($bort) == 4 || mb_substr($bort, 0, 1) == '4' || mb_substr($bort, 0, 1) == '3' || mb_substr($bort, 0, 2) == '10' || mb_substr($bort, 0, 2) == '11') $bort = '0'.$bort;
 		}

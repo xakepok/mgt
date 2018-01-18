@@ -10,8 +10,7 @@ class MgtModelMgt extends BaseDatabaseModel
 		if ($this->route == '') $this->route = false;
 		$this->vehicle = JFactory::getApplication()->input->getString('vehicle', false);
 		if ($this->vehicle == '') $this->vehicle = false;
-		$this->park = JFactory::getApplication()->input->getString('park', false);
-		if ($this->park == '') $this->park = false;
+		$this->type = JFactory::getApplication()->input->getString('type', '2');
 		$this->date_1 = MgtHelper::getDateFromUrl('date_1');
 		$this->date_2 = MgtHelper::getDateFromUrl('date_2');
 		if (mb_substr($this->vehicle, 0, 1) == '0') $this->vehicle = mb_substr($this->vehicle, 1);
@@ -28,16 +27,16 @@ class MgtModelMgt extends BaseDatabaseModel
 
 		if ($this->route === false && $this->vehicle === false)
 		{
-			$query->select('DISTINCT `vehicle`, `route`');
+			$query->select('DISTINCT `vehicle`, `route`, `tip`');
 		}
 		if ($this->route !== false && $this->vehicle === false)
 		{
-			$query->select("`vehicle`, `route`, DATE_FORMAT(`dat`, '{$format}') as `dat`");
+			$query->select("`vehicle`, `route`, `tip`, DATE_FORMAT(`dat`, '{$format}') as `dat`");
 			$query->where("`route` = '{$this->route}'");
 		}
 		if ($this->route === false && $this->vehicle !== false)
 		{
-			$query->select("`vehicle`, `route`, DATE_FORMAT(`dat`, '{$format}') as `dat`");
+			$query->select("`vehicle`, `route`, `tip`, DATE_FORMAT(`dat`, '{$format}') as `dat`");
 			$query->where("`vehicle` = '{$this->vehicle}'");
 		}
 		if ($this->date_1 == $this->date_2)
@@ -48,6 +47,7 @@ class MgtModelMgt extends BaseDatabaseModel
         {
             $query->where("`dat` BETWEEN '{$this->date_1} 00:00:00' AND '{$this->date_2} 23:59:59'");
         }
+        $query->where("`tip` = '{$this->type}'");
 
 		$query->from($table);
 		$query->order('`vehicle` ASC, `dat` DESC');
@@ -60,13 +60,16 @@ class MgtModelMgt extends BaseDatabaseModel
 		foreach ($res as $item)
 		{
 			$vehicle = $item['vehicle'];
-			if (strlen($item['vehicle']) == 4 || mb_substr($item['vehicle'], 0, 1) == '4' || mb_substr($item['vehicle'], 0, 1) == '3' || mb_substr($item['vehicle'], 0, 2) == '10' || mb_substr($item['vehicle'], 0, 2) == '11') $vehicle = '0'.$item['vehicle'];
-			if ($this->park !== false && mb_substr($vehicle, 0, 2) != $this->park) continue;
+			if ((int) $item['tip'] < 1) {
+				if (strlen($item['vehicle']) == 4 || mb_substr($item['vehicle'], 0, 1) == '4' || mb_substr($item['vehicle'], 0, 1) == '3' || mb_substr($item['vehicle'], 0, 2) == '10' || mb_substr($item['vehicle'], 0, 2) == '11') $vehicle = '0'.$item['vehicle'];
+			}
+
 			if (!empty($item['dat'])) {
 				$arr[] = array(
 					'vehicle' => $vehicle,
 					'route' => $item['route'],
-					'dat' => $item['dat']
+					'dat' => $item['dat'],
+					'type' => $item['tip']
 				);
 			}
 			else
@@ -102,5 +105,5 @@ class MgtModelMgt extends BaseDatabaseModel
 		return $last;
 	}
 
-	private $park, $route, $vehicle, $date_1, $date_2;
+	private $type, $route, $vehicle, $date_1, $date_2;
 }

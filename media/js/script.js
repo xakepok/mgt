@@ -4,9 +4,7 @@ jQuery(document).ready(function () {
         var date_2 = jQuery("input[name='date_2']").val();
         var vehicle = jQuery("input[name='vehicle']").val();
         var route = jQuery("input[name='route']").val();
-        var park = jQuery("select[name='park'] :selected").val();
-        console.log('date_1: ' + date_1 + ', date_2: ' + date_2 + ', vehicle: ' + vehicle + ', park: ' + park + ', route: ' + route);
-        if (date_1 != date_2 && park == '' && vehicle == '' && route == '')
+        if (date_1 != date_2 && vehicle == '' && route == '')
         {
             showError(1);
             return false;

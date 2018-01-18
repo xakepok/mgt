@@ -17,20 +17,12 @@ echo "<p>", JText::_('COM_MGT_ONLINE_FILTER'), ":</p>";
         </tr>
         <tr>
             <td>
-			    <?php echo JText::_('COM_MGT_ONLINE_FILTER_PARK'); ?>
+			    <?php echo JText::_('COM_MGT_FILTER_TRANSPORT_TYPE'); ?>
             </td>
             <td>
-                <select name="park">
-                    <option value="" <?php if ($this->park == '') echo ' selected';?>>Все</option>
-                    <option value="01" <?php if ($this->park == '01') echo ' selected';?>>1</option>
-                    <option value="03" <?php if ($this->park == '03') echo ' selected';?>>3</option>
-                    <option value="04" <?php if ($this->park == '04') echo ' selected';?>>4</option>
-                    <option value="08" <?php if ($this->park == '08') echo ' selected';?>>8</option>
-                    <option value="14" <?php if ($this->park == '14') echo ' selected';?>>14</option>
-                    <option value="15" <?php if ($this->park == '15') echo ' selected';?>>15</option>
-                    <option value="16" <?php if ($this->park == '16') echo ' selected';?>>16</option>
-                    <option value="17" <?php if ($this->park == '17') echo ' selected';?>>17</option>
-                    <option value="19" <?php if ($this->park == '19') echo ' selected';?>>19</option>
+                <select name="type">
+                    <option value="0" <?php if ($this->type == '0') echo ' selected';?>><?php echo JText::_('COM_MGT_FILTER_TYPE_BUS'); ?></option>
+                    <option value="2" <?php if ($this->type == '2') echo ' selected';?>><?php echo JText::_('COM_MGT_FILTER_TYPE_TRAM'); ?></option>
                 </select>
             </td>
         </tr>
