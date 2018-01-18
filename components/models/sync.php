@@ -34,21 +34,21 @@ class MgtModelSync extends BaseDatabaseModel
 			->from('#__mgt_last_sync');
 		$db->setQuery($query, 0, 1);
 		$id = $db->loadAssoc();
-		if ($id['lastPark'] == '1' && $id['lastID'] > 100550 && $id['lastID'] < 1003001) return array('lastPark' => '1', 'lastID' => '1003000');
-		if ($id['lastPark'] == '1' && $id['lastID'] > 1001750) return array('lastPark' => '3', 'lastID' => '1003000');
-		if ($id['lastPark'] == '3' && $id['lastID'] > 1003998 && $id['lastID'] < 1004001) return array('lastPark' => '3', 'lastID' => '1004000');
-		if ($id['lastPark'] == '3' && $id['lastID'] > 1004998) return array('lastPark' => '4', 'lastID' => '1004000');
-		if ($id['lastPark'] == '4' && $id['lastID'] > 1004998) return array('lastPark' => '8', 'lastID' => '1001000');
-		if ($id['lastPark'] == '8' && $id['lastID'] > 1001998 && $id['lastID'] < 1008001) return array('lastPark' => '8', 'lastID' => '1008000');
-		if ($id['lastPark'] == '8' && $id['lastID'] > 1008550) return array('lastPark' => '9', 'lastID' => '1016000');
-		if ($id['lastPark'] == '9' && $id['lastID'] > 1016998 && $id['lastID'] < 1017001) return array('lastPark' => '9', 'lastID' => '1017000');
-		if ($id['lastPark'] == '9' && $id['lastID'] > 1017800) return array('lastPark' => '11', 'lastID' => '1011000');
-		if ($id['lastPark'] == '11' && $id['lastID'] > 1011998) return array('lastPark' => '14', 'lastID' => '1014000');
-		if ($id['lastPark'] == '14' && $id['lastID'] > 1014600) return array('lastPark' => '15', 'lastID' => '1015000');
-		if ($id['lastPark'] == '15' && $id['lastID'] > 1015998) return array('lastPark' => '17', 'lastID' => '1017000');
-		if ($id['lastPark'] == '17' && $id['lastID'] > 1017998) return array('lastPark' => '19', 'lastID' => '1019000');
-		if ($id['lastPark'] == '19' && $id['lastID'] > 1019600) return array('lastPark' => '204', 'lastID' => '1203000');
-		if ($id['lastPark'] == '204' && $id['lastID'] > 1204999) return array('lastPark' => '1', 'lastID' => '100000');
+		if ($id['lastPark'] == '1' && $id['lastID'] > 100550 && $id['lastID'] < 1003001) return array('lastPark' => '1', 'type'=>0, 'lastID' => '1003000');
+		if ($id['lastPark'] == '1' && $id['lastID'] > 1001750) return array('lastPark' => '3', 'type'=>0, 'lastID' => '1003000');
+		if ($id['lastPark'] == '3' && $id['lastID'] > 1003998 && $id['lastID'] < 1004001) return array('lastPark' => '3', 'type'=>0, 'lastID' => '1004000');
+		if ($id['lastPark'] == '3' && $id['lastID'] > 1004998) return array('lastPark' => '4', 'type'=>0, 'lastID' => '1004000');
+		if ($id['lastPark'] == '4' && $id['lastID'] > 1004998) return array('lastPark' => '8', 'type'=>0, 'lastID' => '1001000');
+		if ($id['lastPark'] == '8' && $id['lastID'] > 1001998 && $id['lastID'] < 1008001) return array('lastPark' => '8', 'type'=>0, 'lastID' => '1008000');
+		if ($id['lastPark'] == '8' && $id['lastID'] > 1008550) return array('lastPark' => '9', 'type'=>0, 'lastID' => '1016000');
+		if ($id['lastPark'] == '9' && $id['lastID'] > 1016998 && $id['lastID'] < 1017001) return array('lastPark' => '9', 'type'=>0, 'lastID' => '1017000');
+		if ($id['lastPark'] == '9' && $id['lastID'] > 1017800) return array('lastPark' => '11', 'type'=>0, 'lastID' => '1011000');
+		if ($id['lastPark'] == '11' && $id['lastID'] > 1011998) return array('lastPark' => '14', 'type'=>0, 'lastID' => '1014000');
+		if ($id['lastPark'] == '14' && $id['lastID'] > 1014600) return array('lastPark' => '15', 'type'=>0, 'lastID' => '1015000');
+		if ($id['lastPark'] == '15' && $id['lastID'] > 1015998) return array('lastPark' => '17', 'type'=>0, 'lastID' => '1017000');
+		if ($id['lastPark'] == '17' && $id['lastID'] > 1017998) return array('lastPark' => '19', 'type'=>0, 'lastID' => '1019000');
+		if ($id['lastPark'] == '19' && $id['lastID'] > 1019600) return array('lastPark' => '204', 'type'=>2, 'lastID' => '1203000');
+		if ($id['lastPark'] == '204' && $id['lastID'] > 1204999) return array('lastPark' => '1', 'type'=>0, 'lastID' => '100000');
 		return $id;
 	}
 
@@ -80,7 +80,7 @@ class MgtModelSync extends BaseDatabaseModel
 				$num = mb_stripos($tmp, ' / ');
 				if ($num !== false)
 				{
-					$vehicle = (int) trim(mb_substr($tmp, $num+3, NULL, 'UTF-8'));
+					$vehicle = (int) ($start['lastPark'] < 20) ? trim(mb_substr($tmp, $num+3, NULL, 'UTF-8')) : trim(mb_substr($tmp, 0, 4, 'UTF-8'));
 					if ($vehicle != 0) $res[$params['uniqueid']]['vehicle'] = $vehicle;
 					break;
 				}
@@ -92,7 +92,13 @@ class MgtModelSync extends BaseDatabaseModel
 				foreach ($d->find("a[href^='?mr_id']") as $fnd)
 				{
 					$tmp = trim(pq($fnd)->text());
+					if ($start['type'] != 0) //Для троллейбусов и трамваев
+					{
+						$t = explode('.', $tmp);
+						$tmp = $t[1];
+					}
 					$res[$params['uniqueid']]['route'] = $tmp;
+					$res[$params['uniqueid']]['type'] = $start['type'];
 				}
 			}
 		}
@@ -115,12 +121,13 @@ class MgtModelSync extends BaseDatabaseModel
 	private function exportToBaseMGT($data)
 	{
 		$db = JFactory::getDbo();
-		$query = 'INSERT INTO `#__mgt_online` (`vehicle`, `route`, `uniqueid`) VALUES ';
+		$query = 'INSERT INTO `#__mgt_online` (`tip`, `vehicle`, `route`, `uniqueid`) VALUES ';
 		$values = array();
 		foreach ($data as $item => $value) {
 			$route = $value['route'];
 			$vehicle = $value['vehicle'];
-			if ($vehicle != 0) $values[] = "('{$vehicle}', '{$route}', '{$item}')";
+			$tip = $value['tip'];
+			if ($vehicle != 0) $values[] = "('{$tip}', '{$vehicle}', '{$route}', '{$item}')";
 		}
 		$query .= implode(',', $values);
 		//$query .= " ON DUPLICATE KEY UPDATE `station`=VALUES(`station`), `latence`=VALUES(`latence`), `stamp` = CURRENT_TIMESTAMP()";

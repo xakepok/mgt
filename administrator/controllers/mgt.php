@@ -19,7 +19,7 @@ class MgtControllerMgt extends AdminController
 		{
 			$msg = JText::_('COM_MGT_MSG_SUCCESS_SET_LAST_ID');
 		}
-		$this->setRedirect('index.php?option=com_mgt', $msg);
+		$this->setRedirect(JRoute::_('index.php?option=com_mgt'), $msg);
 	}
 
 	/* Очистка таблицы с онлайном за сегодня */
@@ -35,6 +35,6 @@ class MgtControllerMgt extends AdminController
 		{
 			$msg = JText::_('COM_MGT_MSG_TRUNCATE_ONLINE');
 		}
-		$this->setRedirect('index.php?option=com_mgt', $msg);
+		$this->setRedirect(JRoute::_('index.php?option=com_mgt&task=mgt.setLastID&uniqueid=1019601&srv_id=19'), $msg);
 	}
 }
