@@ -3,7 +3,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\BaseController;
 defined('_JEXEC') or die;
 
-define('VERSION', '1.2'); //Версия компонента
+define('VERSION', '1.2.1'); //Версия компонента
 
 require_once JPATH_ADMINISTRATOR.'/components/com_mgt/helpers/mgt.php';
 

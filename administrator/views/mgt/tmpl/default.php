@@ -1,13 +1,4 @@
 <?php
-/**
- * @package    mgt
- *
- * @author     Admin <your@email.com>
- * @copyright  A copyright
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
- * @link       http://your.url.com
- */
-
 defined('_JEXEC') or die;
 
 ?>
@@ -15,5 +6,5 @@ defined('_JEXEC') or die;
 	<?php echo $this->sidebar; ?>
 </div>
 <div id="j-main-container" class="span10">
-    Hello
+    <?php echo $this->loadTemplate('lastid'); ?>
 </div>

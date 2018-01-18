@@ -34,6 +34,7 @@ class MgtModelSync extends BaseDatabaseModel
 			->from('#__mgt_last_sync');
 		$db->setQuery($query, 0, 1);
 		$id = $db->loadAssoc();
+		if ($id['lastPark'] == '1' && $id['lastID'] > 100550 && $id['lastID'] < 1003001) return array('lastPark' => '1', 'lastID' => '1003000');
 		if ($id['lastPark'] == '1' && $id['lastID'] > 1001750) return array('lastPark' => '3', 'lastID' => '1003000');
 		if ($id['lastPark'] == '3' && $id['lastID'] > 1003998 && $id['lastID'] < 1004001) return array('lastPark' => '3', 'lastID' => '1004000');
 		if ($id['lastPark'] == '3' && $id['lastID'] > 1004998) return array('lastPark' => '4', 'lastID' => '1004000');
@@ -46,7 +47,8 @@ class MgtModelSync extends BaseDatabaseModel
 		if ($id['lastPark'] == '14' && $id['lastID'] > 1014600) return array('lastPark' => '15', 'lastID' => '1015000');
 		if ($id['lastPark'] == '15' && $id['lastID'] > 1015998) return array('lastPark' => '17', 'lastID' => '1017000');
 		if ($id['lastPark'] == '17' && $id['lastID'] > 1017998) return array('lastPark' => '19', 'lastID' => '1019000');
-		if ($id['lastPark'] == '19' && $id['lastID'] > 1019600) return array('lastPark' => '1', 'lastID' => '1001000');
+		if ($id['lastPark'] == '19' && $id['lastID'] > 1019600) return array('lastPark' => '204', 'lastID' => '1203000');
+		if ($id['lastPark'] == '204' && $id['lastID'] > 1204999) return array('lastPark' => '1', 'lastID' => '100000');
 		return $id;
 	}
 
