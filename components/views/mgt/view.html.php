@@ -3,14 +3,16 @@ use Joomla\CMS\MVC\View\HtmlView;
 defined('_JEXEC') or die;
 class MgtViewMgt extends HtmlView
 {
-    public $type, $items, $route, $vehicle, $stat;
+    public $type, $items, $route, $vehicle, $stat, $unique;
 
     public function display() {
     	try
 	    {
-            $this->route   = JFactory::getApplication()->input->getString('route', '');
-            $this->vehicle = JFactory::getApplication()->input->getString('vehicle', '');
-            $this->type    = JFactory::getApplication()->input->getString('type', '0');
+		    $input = JFactory::getApplication()->input;
+		    $this->route   = $input->getString('route', '');
+		    $this->vehicle = $input->getString('vehicle', '');
+		    $this->type    = $input->getString('type', '0');
+            $this->unique = $input->getBool('unique', false);
 
             if ($this->route == '' && $this->vehicle == '' && $this->type == '')
             {

@@ -27,3 +27,7 @@
     color: #00be19;
     cursor: pointer;
 }
+#mgt-filter-unique {
+    position: fixed;
+    padding-left: 3px;
+}

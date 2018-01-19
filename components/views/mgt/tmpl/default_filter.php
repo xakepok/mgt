@@ -43,6 +43,14 @@ echo "<p>", JText::_('COM_MGT_ONLINE_FILTER'), ":</p>";
             </td>
         </tr>
         <tr>
+            <td>
+                <label for="mgt-filter-unique"><?php echo JText::_('COM_MGT_FILTER_UNIQUE'); ?></label>
+            </td>
+            <td>
+                <input type="checkbox" name="unique" value="1" <?php if ($this->unique) echo 'checked'; ?> id="mgt-filter-unique">
+            </td>
+        </tr>
+        <tr>
             <td colspan="2">
                 <input type="submit" value="<?php echo JText::_('COM_MGT_ONLINE_FILTER_APPLY'); ?>"><br>
                 <div><span id="mgt-alert"></span></div>

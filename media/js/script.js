@@ -27,6 +27,7 @@ jQuery(document).ready(function () {
     jQuery(".mgt-cur-date").bind('click', function () {
         jQuery("input[name='date_2']").val(jQuery("input[name='date_1']").val());
     });
+    jQuery("#mgt-filter-unique").css("position", "inherit").css("left", "inherit");
 });
 
 function showError(code) {

@@ -6,14 +6,16 @@ class MgtModelMgt extends BaseDatabaseModel
 {
 	public function __construct(array $config = array())
 	{
-		$this->route = JFactory::getApplication()->input->getString('route', false);
+		$input = JFactory::getApplication()->input;
+		$this->route = $input->getString('route', false);
 		if ($this->route == '') $this->route = false;
-		$this->vehicle = JFactory::getApplication()->input->getString('vehicle', false);
+		$this->vehicle = $input->getString('vehicle', false);
 		if ($this->vehicle == '') $this->vehicle = false;
-		$this->type = JFactory::getApplication()->input->getString('type', '2');
+		$this->type = $input->getString('type', '2');
 		$this->date_1 = MgtHelper::getDateFromUrl('date_1');
 		$this->date_2 = MgtHelper::getDateFromUrl('date_2');
 		if (mb_substr($this->vehicle, 0, 1) == '0') $this->vehicle = mb_substr($this->vehicle, 1);
+		$this->unique = $input->getBool('unique', false);
 		parent::__construct($config);
 	}
 
@@ -65,21 +67,29 @@ class MgtModelMgt extends BaseDatabaseModel
 			}
 
 			if (!empty($item['dat'])) {
-				$arr[] = array(
-					'vehicle' => $vehicle,
-					'route' => $item['route'],
-					'dat' => $item['dat'],
-					'type' => $item['tip']
-				);
+				if ($this->checkUnique($arr, 'vehicle', $vehicle))
+				{
+					$arr[] = array(
+						'vehicle' => $vehicle,
+						'route' => $item['route'],
+						'dat' => $item['dat'],
+						'type' => $item['tip']
+					);
+				}
 			}
 			else
 			{
-				$arr[] = array(
-					'vehicle' => $vehicle,
-					'route' => $item['route'],
-				);
+				if ($this->checkUnique($arr, 'vehicle', $vehicle))
+				{
+					$arr[] = array(
+						'vehicle' => $vehicle,
+						'route' => $item['route'],
+						'type' => $item['tip']
+					);
+				}
 			}
 		}
+
 		return $arr;
 	}
 
@@ -105,5 +115,35 @@ class MgtModelMgt extends BaseDatabaseModel
 		return $last;
 	}
 
-	private $type, $route, $vehicle, $date_1, $date_2;
+	private function checkUnique($array, $key, $key_value)
+	{
+		if ($this->unique)
+		{
+			return ($this->is_in_array($array, $key, $key_value) == 'yes') ? false : true;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
+	private function is_in_array($array, $key, $key_value){
+		$within_array = 'no';
+		foreach( $array as $k=>$v ){
+			if( is_array($v) ){
+				$within_array = $this->is_in_array($v, $key, $key_value);
+				if( $within_array == 'yes' ){
+					break;
+				}
+			} else {
+				if( $v == $key_value && $k == $key ){
+					$within_array = 'yes';
+					break;
+				}
+			}
+		}
+		return $within_array;
+	}
+
+	private $type, $route, $vehicle, $date_1, $date_2, $unique;
 }
