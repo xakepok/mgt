@@ -89,6 +89,7 @@ class MgtModelSync extends BaseDatabaseModel
 			{
 				$tmp = new phpQueryObject($d->find('tbody'));
 				$res[$params['uniqueid']]['route'] = false;
+				$res[$params['uniqueid']]['srv_id'] = $start['lastPark'];
 				foreach ($d->find("a[href^='?mr_id']") as $fnd)
 				{
 					$tmp = trim(pq($fnd)->text());
@@ -121,19 +122,34 @@ class MgtModelSync extends BaseDatabaseModel
 	private function exportToBaseMGT($data)
 	{
 		$db = JFactory::getDbo();
-		$query = 'INSERT INTO `#__mgt_online` (`tip`, `vehicle`, `route`, `uniqueid`) VALUES ';
+		$query = 'INSERT INTO `#__mgt_online` (`tip`, `vehicle`, `route`, `uniqueid`, `srv_id`) VALUES ';
 		$values = array();
 		foreach ($data as $item => $value) {
 			$route = $value['route'];
 			$vehicle = $value['vehicle'];
 			$tip = $value['type'];
-			if ($vehicle != 0) $values[] = "('{$tip}', '{$vehicle}', '{$route}', '{$item}')";
+			$srv_id = $value['srv_id'];
+			if ($vehicle != 0) $values[] = "('{$tip}', '{$vehicle}', '{$route}', '{$item}', '{$srv_id}')";
 		}
 		$query .= implode(',', $values);
 		//$query .= " ON DUPLICATE KEY UPDATE `station`=VALUES(`station`), `latence`=VALUES(`latence`), `stamp` = CURRENT_TIMESTAMP()";
 
-		$db->setQuery($query);
-		$db->query();
+		$db->setQuery($query)->execute();
+
+        $query = 'INSERT INTO `#__mgt_vehicles` (`uniqueid`, `srv_id`, `type`, `bort`) VALUES ';
+        $values = array();
+
+        foreach ($data as $item => $value) {
+            $vehicle = $value['vehicle'];
+            $tip = $value['type'];
+            $srv_id = $value['srv_id'];
+            if ($vehicle != 0) $values[] = "('{$item}', '{$srv_id}', '{$tip}', '{$vehicle}')";
+        }
+        $query .= implode(',', $values);
+
+        $query .= " ON DUPLICATE KEY UPDATE `gos`=VALUES(`gos`)";
+
+        $db->setQuery($query)->execute();
 
 		return true;
 	}
@@ -143,11 +159,11 @@ class MgtModelSync extends BaseDatabaseModel
 	{
 		$db = JFactory::getDbo();
 		$query = "call archive_mgt_online()";
-		$db->setQuery($query);
-		$db->query();
+		$db->setQuery($query)->execute();
+
 		$query = 'call clear_mgt_online()';
-		$db->setQuery($query);
-		$db->query();
+		$db->setQuery($query)->execute();
+
 		return true;
 	}
 
