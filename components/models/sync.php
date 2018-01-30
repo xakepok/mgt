@@ -45,7 +45,7 @@ class MgtModelSync extends BaseDatabaseModel
 		if ($id['lastPark'] == '9' && $id['lastID'] > 1017800) return array('lastPark' => '11', 'type'=>0, 'lastID' => '1011000');
 		if ($id['lastPark'] == '11' && $id['lastID'] > 1011998) return array('lastPark' => '14', 'type'=>0, 'lastID' => '1014000');
 		if ($id['lastPark'] == '14' && $id['lastID'] > 1014600) return array('lastPark' => '15', 'type'=>0, 'lastID' => '1015000');
-		if ($id['lastPark'] == '15' && $id['lastID'] > 1015998) return array('lastPark' => '17', 'type'=>0, 'lastID' => '1017000');
+		if ($id['lastPark'] == '15' && $id['lastID'] > 1016100) return array('lastPark' => '17', 'type'=>0, 'lastID' => '1017000');
 		if ($id['lastPark'] == '17' && $id['lastID'] > 1017998) return array('lastPark' => '19', 'type'=>0, 'lastID' => '1019000');
 		if ($id['lastPark'] == '19' && $id['lastID'] > 1019600) return array('lastPark' => '204', 'type'=>2, 'lastID' => '1203000');
 		if ($id['lastPark'] == '204' && $id['lastID'] > 1204800) return array('lastPark' => '1', 'type'=>0, 'lastID' => '100000');
