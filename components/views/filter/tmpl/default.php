@@ -2,6 +2,7 @@
 use Joomla\CMS\HTML\HTMLHelper;
 HTMLHelper::_('script', 'com_mgt/script.js', array('version' => 'auto', 'relative' => true));
 HTMLHelper::_('stylesheet', 'com_mgt/style.css', array('version' => 'auto', 'relative' => true));
+JHtml::_('behavior.formvalidator');
 ?>
 <div class="mgt-park">
 	<?php echo $this->loadTemplate('result');?>
