@@ -8,6 +8,7 @@ class MgtHelper
 	public function addSubmenu($vName)
 	{
 		JHtmlSidebar::addEntry(Text::_('COM_MGT'), 'index.php?option=com_mgt&view=mgt', $vName == 'mgt');
+		JHtmlSidebar::addEntry(Text::_('COM_MGT_MENU_VEHICLES'), 'index.php?option=com_mgt&view=vehicles', $vName == 'vehicles');
 	}
 
 	static function dump($data)
