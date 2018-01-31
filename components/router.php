@@ -8,6 +8,9 @@ class MgtRouter extends JComponentRouterBase
 	    if ($query['view'] == 'mgt') {
 		    unset($query['view']);
 	    }
+	    if ($query['view'] == 'filter') {
+		    unset($query['view']);
+	    }
         return $segments;
     }
 
@@ -18,6 +21,10 @@ class MgtRouter extends JComponentRouterBase
         switch ($menu->query["view"]) {
 	        case 'mgt': {
 		        $vars['view'] = 'mgt';
+		        break;
+	        }
+	        case 'filter': {
+		        $vars['view'] = 'filter';
 		        break;
 	        }
         }

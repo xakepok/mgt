@@ -105,15 +105,18 @@ class MgtModelSync extends BaseDatabaseModel
 		}
 
 		if (!empty($res)) {
-			$this->exportToBaseMGT($res);
+			$this->insertRoutes($res);
+			$this->insertVehicles($res);
+			$data = $this->prepare($res);
+			if ($data !== false) $this->exportToBaseMGT($data);
 		}
 		$last = $start['lastID'] + 50;
 		$park = $start['lastPark'];
 
 		$query = "UPDATE `#__mgt_last_sync` SET `lastID` = {$last}, `lastPark` = {$park}";
 		$db = JFactory::getDbo();
-		$db->setQuery($query);
-		$db->query();
+		$db->setQuery($query)->execute();
+
 
 		return $res;
 	}
@@ -121,37 +124,110 @@ class MgtModelSync extends BaseDatabaseModel
 	/* Экспортируем записи онлайна МГТ в базу */
 	private function exportToBaseMGT($data)
 	{
-		$db = JFactory::getDbo();
-		$query = 'INSERT INTO `#__mgt_online` (`tip`, `vehicle`, `route`, `uniqueid`, `srv_id`) VALUES ';
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+		$columns = array($db->quoteName("vehicle_id"), $db->quoteName("route_id"));
+		$query
+			->insert($db->quoteName("#__mgt_online_new"))
+			->columns($columns);
+		foreach ($data as $item)
+		{
+			$query
+				->values($item['vehicle'].", ".$item['route']);
+		}
+
+		return $db->setQuery($query)->execute();
+	}
+
+	/* Подготавливаем данные для вставки */
+	private function prepare($data)
+	{
+		$db =& $this->getDbo();
+		$db->setUtf();
+		$query = $db->getQuery(true);
+		$vehicles = array();
+		$srv_ids = array();
+		$unique_ids = array();
+		$routes = array();
+		$type = 0;
+
+		foreach ($data as $item => $value)
+		{
+			$vehicles[] = $db->quote($value['vehicle']);
+			$srv_ids[] = $db->quote($value['srv_id']);
+			$unique_ids[] = $db->quote($item);
+			$routes[] = $db->quote($value['route']);
+			$type = $db->quote($value['type']);
+		}
+		$srv_ids = array_unique($srv_ids);
+		$vehicles = implode(', ', $vehicles);
+		$srv_ids = implode(', ', $srv_ids);
+		$unique_ids = implode(', ', $unique_ids);
+		$routes = implode(', ', $routes);
+
+		$query
+			->select("*")
+			->from($db->quoteName("#__mgt_vehicles"))
+			->where($db->quoteName("bort")." IN ({$vehicles})")
+			->where($db->quoteName("srv_id")." IN ({$srv_ids})")
+			->where($db->quoteName("uniqueid")." IN ({$unique_ids})");
+		$vehicles = $db->setQuery($query)->loadAssocList('uniqueid');
+
+		$db->setUtf();
+		$query = $db->getQuery(true);
+		$query
+			->select("*")
+			->from($db->quoteName("#__mgt_routes"))
+			->where($db->quoteName("route")." IN ({$routes})")
+			->where($db->quoteName("type")." = {$type}");
+		$routes = $db->setQuery($query)->loadAssocList('route');
+
+		$result = array();
+		foreach ($data as $item => $value)
+		{
+			$result[] = array(
+				'vehicle' => $db->quote($vehicles[$item]['id']),
+				'route' => $db->quote($routes[$value['route']]['id'])
+			);
+		}
+		return (!empty($result)) ? $result : false;
+	}
+
+	/* Вставляем маршрут в базу */
+	private function insertVehicles($data)
+	{
+		$db = $this->getDbo();
+		$query = 'INSERT INTO `#__mgt_vehicles` (`uniqueid`, `srv_id`, `type`, `bort`) VALUES ';
 		$values = array();
 		foreach ($data as $item => $value) {
-			$route = $value['route'];
 			$vehicle = $value['vehicle'];
 			$tip = $value['type'];
 			$srv_id = $value['srv_id'];
-			if ($vehicle != 0) $values[] = "('{$tip}', '{$vehicle}', '{$route}', '{$item}', '{$srv_id}')";
+			if ($vehicle != 0) $values[] = "('{$item}', '{$srv_id}', '{$tip}', '{$vehicle}')";
 		}
 		$query .= implode(',', $values);
-		//$query .= " ON DUPLICATE KEY UPDATE `station`=VALUES(`station`), `latence`=VALUES(`latence`), `stamp` = CURRENT_TIMESTAMP()";
+
+		$query .= " ON DUPLICATE KEY UPDATE `uniqueid`=VALUES(`uniqueid`), `srv_id`=VALUES(`srv_id`), `type`=VALUES(`type`), `bort`=VALUES(`bort`)";
 
 		$db->setQuery($query)->execute();
+	}
 
-        $query = 'INSERT INTO `#__mgt_vehicles` (`uniqueid`, `srv_id`, `type`, `bort`) VALUES ';
-        $values = array();
+	/* Вставляем ТС в базу */
+	private function insertRoutes($data)
+	{
+		$db = $this->getDbo();
+		$query = 'INSERT INTO `#__mgt_routes` (`type`, `route`) VALUES ';
+		$values = array();
+		foreach ($data as $item => $value) {
+			$route = $value['route'];
+			$tip = $value['type'];
+			if ($route !== 0) $values[] = "('{$tip}', '{$route}')";
+		}
+		$query .= implode(',', $values);
 
-        foreach ($data as $item => $value) {
-            $vehicle = $value['vehicle'];
-            $tip = $value['type'];
-            $srv_id = $value['srv_id'];
-            if ($vehicle != 0) $values[] = "('{$item}', '{$srv_id}', '{$tip}', '{$vehicle}')";
-        }
-        $query .= implode(',', $values);
+		$query .= " ON DUPLICATE KEY UPDATE `type`=VALUES(`type`), `route`=VALUES(`route`)";
 
-        $query .= " ON DUPLICATE KEY UPDATE `gos`=VALUES(`gos`)";
-
-        $db->setQuery($query)->execute();
-
-		return true;
+		$db->setQuery($query)->execute();
 	}
 
 	/* Архивирование таблицы МГТ за сутки */

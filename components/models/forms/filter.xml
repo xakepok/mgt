@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addrulepath="/components/com_mgt/models/rules">
+    <fieldset name="names">
+        <field
+                name="id"
+                type="hidden"
+        />
+        <field
+                name="vehicle_id"
+                type="text"
+                label="COM_MGT_ONLINE_VEHICLE"
+                description="COM_MGT_ONLINE_FILTER_VEHICLE"
+                required="false"
+                class="input-xlarge"
+                autocomplete="off"
+        />
+        <field
+                name="route_id"
+                type="text"
+                label="COM_MGT_ONLINE_ROUTE"
+                description="COM_MGT_ONLINE_FILTER_ROUTE"
+                required="false"
+                class="input-xlarge"
+                validate="esr"
+                autocomplete="off"
+        />
+    </fieldset>
+</form>
